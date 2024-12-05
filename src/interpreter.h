@@ -31,9 +31,6 @@ public:
 class Interpreter : public ProcessorEngine {
 public:
     std::ofstream trace_file;
-    Interpreter(CoreTiming& core_timing, RegisterState& regs, MemoryInterface& mem)
-        : core_timing(core_timing), regs(regs), mem(mem) {
-    }
 
     void Reset() override {
 
