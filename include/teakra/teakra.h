@@ -25,6 +25,7 @@ struct AHBMCallback {
 
 class Teakra {
 public:
+    Teakra();
     Teakra(const ProcessorEngineFactory&);
     ~Teakra();
 
