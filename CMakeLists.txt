@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 project(teakra CXX)
 
-if(CMAKE_VERSION VERSION_GREATER "3.12")
-    cmake_policy(SET CMP0079 NEW)
+if(COMMAND CMAKE_POLICY)
+    if(POLICY CMP0079)
+        cmake_policy(SET CMP0079 NEW)
+    endif()
 endif()
-
 
 # Determine if we're built as a subproject (using add_subdirectory)
 # or if this is the master project.
