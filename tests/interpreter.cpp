@@ -1,6 +1,6 @@
 #include <array>
+#include <catch2/catch_all.hpp>
 #include <memory>
-#include <catch.hpp>
 #include "../src/ahbm.h"
 #include "../src/apbp.h"
 #include "../src/btdmp.h"
