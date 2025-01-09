@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iterator>
 #include <memory>
-#include <catch.hpp>
+#include <catch2/catch_all.hpp>
 #include "../src/interpreter.h"
 #include "../src/matcher.h"
 #include "../src/processor.h"

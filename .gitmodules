@@ -7,3 +7,6 @@
 [submodule "externals/robin-map"]
 	path = externals/robin-map
 	url = https://github.com/Tessil/robin-map
+[submodule "externals/catch2"]
+	path = externals/catch2
+	url = https://github.com/catchorg/Catch2.git
