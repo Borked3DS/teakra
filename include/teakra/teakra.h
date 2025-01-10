@@ -82,6 +82,6 @@ private:
     std::unique_ptr<Impl> impl_jit;
     std::unique_ptr<Impl> impl_interp;
     Impl* impl;
-    bool use_jit;
+    [[maybe_unused]] bool use_jit;
 };
 } // namespace Teakra
