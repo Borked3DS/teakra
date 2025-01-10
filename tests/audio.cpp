@@ -133,13 +133,6 @@ AudioState::AudioState(std::vector<u8>&& dspfirm) {
 
         dsp_structs[0][0][0] = frame_id;
 
-        for (int i = 0; i < 15; i++) {
-            const u32 addr0 = static_cast<u32>(dsp_addrs[i]);
-            const u32 addr1 = static_cast<u32>(dsp_addrs[i]) | 0x10000;
-            dsp_structs[i][0] = reinterpret_cast<u16*>(lle.GetInterpDspDataPointer(addr0 * 2));
-            dsp_structs[i][1] = reinterpret_cast<u16*>(lle.GetInterpDspDataPointer(addr1 * 2));
-        }
-
         for (int i = 0; i < 2; i++) {
             shared_mem_interp[i].frame_counter = reinterpret_cast<u16*>(dsp_structs[0][i]);
 
