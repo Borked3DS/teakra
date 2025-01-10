@@ -85,9 +85,9 @@ public:
 private:
     void print_registers() {
         fprintf(dbg_out, "Registers:\n");
-        fprintf(dbg_out, "a0:  0x%010lx    b0:  0x%010lx\n", regs.a[0] & 0xFFFFFFFFFF,
+        fprintf(dbg_out, "a0:  0x%010llx    b0:  0x%010llx\n", regs.a[0] & 0xFFFFFFFFFF,
                 regs.b[0] & 0xFFFFFFFFFF);
-        fprintf(dbg_out, "a1:  0x%010lx    b1:  0x%010lx\n", regs.a[1] & 0xFFFFFFFFFF,
+        fprintf(dbg_out, "a1:  0x%010llx    b1:  0x%010llx\n", regs.a[1] & 0xFFFFFFFFFF,
                 regs.b[1] & 0xFFFFFFFFFF);
         // fprintf(dbg_out, "a1s: 0x%010lx    b1s: 0x%010lx\n", regs.a1s, regs.b1s);
         fprintf(dbg_out, "x0:  0x%04x          y0:  0x%04x\n", regs.x[0], regs.y[0]);
@@ -198,12 +198,12 @@ private:
 
         fprintf(dbg_out, "st0: 0x%04x\n", regs.Get<st0>());
         fprintf(dbg_out, " a0e fz fm fn fv fc0 fe flm|fvl fr im1 im0 ie sat\n");
-        fprintf(dbg_out, " 0x%lx  %u  %u  %u  %u   %u  %u       %u  %u   %u   %u  %u   %u\n",
+        fprintf(dbg_out, " 0x%llx  %u  %u  %u  %u   %u  %u       %u  %u   %u   %u  %u   %u\n",
                 (regs.a[0] >> 32) & 0xF, regs.fz, regs.fm, regs.fn, regs.fv, regs.fc0, regs.fe,
                 regs.flm | regs.fvl, regs.fr, regs.im[1], regs.im[0], regs.ie, regs.sat);
         fprintf(dbg_out, "st1: 0x%04x\n", regs.Get<st1>());
         fprintf(dbg_out, " a1e ps0 . . page\n");
-        fprintf(dbg_out, " 0x%lx   %u x x 0x%02x\n", (regs.a[1] >> 32) & 0xF, regs.ps[0],
+        fprintf(dbg_out, " 0x%llx   %u x x 0x%02x\n", (regs.a[1] >> 32) & 0xF, regs.ps[0],
                 regs.page);
         fprintf(dbg_out, "st2: 0x%04x\n", regs.Get<st2>());
         fprintf(dbg_out, " ip1 ip0 ip2 . iu1 iu0 ou1 ou0 s im2 m5 m4 m3 m2 m1 m0\n");
