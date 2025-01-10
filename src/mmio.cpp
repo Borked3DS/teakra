@@ -248,21 +248,21 @@ MMIORegion::MMIORegion(MemoryInterfaceUnit& miu, ICU& icu, Apbp& apbp_from_cpu, 
     // impl->cells[0x108]; // MIU_Z2WSCFG
     // impl->cells[0x10C]; // MIU_Z3WSCFG
     impl->cells[0x10E].get = [&miu]() -> u16 { return miu.x_page; }; // MIU_XPAGE
-    impl->cells[0x10E].set = [&miu, this](u16 value) {
+    impl->cells[0x10E].set = [&miu](u16 value) {
         miu.x_page = value;
         *miu.x_offset = MemoryInterfaceUnit::DataMemoryOffset +
                         miu.x_page * MemoryInterfaceUnit::DataMemoryBankSize;
     };
 
     impl->cells[0x110].get = [&miu]() -> u16 { return miu.y_page; }; // MIU_YPAGE
-    impl->cells[0x110].set = [&miu, this](u16 value) {
+    impl->cells[0x110].set = [&miu](u16 value) {
         miu.y_page = value;
         *miu.y_offset = MemoryInterfaceUnit::DataMemoryOffset +
                         miu.y_page * MemoryInterfaceUnit::DataMemoryBankSize;
     };
 
     impl->cells[0x112].get = [&miu]() -> u16 { return miu.z_page; }; // MIU_ZPAGE
-    impl->cells[0x112].set = [&miu, this](u16 value) {
+    impl->cells[0x112].set = [&miu](u16 value) {
         miu.z_page = value;
         *miu.z_offset = MemoryInterfaceUnit::DataMemoryOffset +
                         miu.z_page * MemoryInterfaceUnit::DataMemoryBankSize;
