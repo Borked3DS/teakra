@@ -4,12 +4,19 @@
 #include <iomanip>
 #include <memory>
 #include <teakra/disassembler.h>
+#include "../ahbm.h"
+#include "../apbp.h"
+#include "../btdmp.h"
 #include "../core_timing.h"
+#include "../dma.h"
+#include "../icu.h"
 #include "../interpreter.h"
 #include "../jit_no_ir.h"
 #include "../memory_interface.h"
+#include "../mmio.h"
 #include "../shared_memory.h"
 #include "../test.h"
+#include "../timer.h"
 
 std::string Flag16ToString(u16 value, const char* symbols) {
     std::string result = symbols;
@@ -37,7 +44,12 @@ int main(int argc, char** argv) {
     Teakra::CoreTiming core_timing{timer, btdmp};
     Teakra::SharedMemory shared_memory;
     Teakra::MemoryInterfaceUnit miu;
-    Teakra::MemoryInterface memory_interface{shared_memory, miu};
+    Teakra::ICU icu;
+    Teakra::Apbp apbp_from_cpu, apbp_from_dsp;
+    Teakra::Ahbm ahbm;
+    Teakra::Dma dma{shared_memory, ahbm};
+    Teakra::MMIORegion mmio{miu, icu, apbp_from_cpu, apbp_from_dsp, timer, dma, ahbm, btdmp};
+    Teakra::MemoryInterface memory_interface{shared_memory, miu, mmio};
     Teakra::RegisterState regs;
     Teakra::Interpreter interpreter(core_timing, regs, memory_interface);
 

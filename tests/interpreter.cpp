@@ -1,18 +1,31 @@
 #include <array>
 #include <memory>
 #include <catch.hpp>
+#include "../src/ahbm.h"
+#include "../src/apbp.h"
+#include "../src/btdmp.h"
 #include "../src/core_timing.h"
+#include "../src/dma.h"
+#include "../src/icu.h"
+#include "../src/memory_interface.h"
+#include "../src/mmio.h"
 #include "../src/interpreter.h"
 #include "../src/memory_interface.h"
 #include "../src/shared_memory.h"
+#include "../src/timer.h"
 
 TEST_CASE("Cycle accuracy", "[interpreter]") {
     std::array<Teakra::Timer, 2> timer{};
     std::array<Teakra::Btdmp, 2> btdmp{};
     Teakra::CoreTiming core_timing{timer, btdmp};
     Teakra::SharedMemory shared_memory;
+    Teakra::ICU icu;
+    Teakra::Apbp apbp_from_cpu, apbp_from_dsp;
+    Teakra::Ahbm ahbm;
+    Teakra::Dma dma{shared_memory, ahbm};
     Teakra::MemoryInterfaceUnit miu;
-    Teakra::MemoryInterface memory_interface{shared_memory, miu};
+    Teakra::MMIORegion mmio{miu, icu, apbp_from_cpu, apbp_from_dsp, timer, dma, ahbm, btdmp};
+    Teakra::MemoryInterface memory_interface{shared_memory, miu, mmio};
     Teakra::RegisterState regs;
     Teakra::Interpreter interpreter(core_timing, regs, memory_interface);
 
