@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
             }
             // interpreter.Run(1);
             jit.unimplemented = false;
-            jit.Run(1, &interpreter);
+            jit.Run(1);
             if (jit.unimplemented) {
                 throw Teakra::UnimplementedException();
             }
