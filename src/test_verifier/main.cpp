@@ -1,3 +1,4 @@
+#include <array>
 #include <cinttypes>
 #include <cstdio>
 #include <iomanip>
@@ -31,7 +32,9 @@ int main(int argc, char** argv) {
         return -2;
     }
 
-    Teakra::CoreTiming core_timing;
+    std::array<Teakra::Timer, 2> timer{};
+    std::array<Teakra::Btdmp, 2> btdmp{};
+    Teakra::CoreTiming core_timing{timer, btdmp};
     Teakra::SharedMemory shared_memory;
     Teakra::MemoryInterfaceUnit miu;
     Teakra::MemoryInterface memory_interface{shared_memory, miu};

@@ -1,8 +1,11 @@
+#include <array>
 #include <catch.hpp>
 #include "../src/timer.h"
 
 struct TimerTestEnvironment {
-    Teakra::CoreTiming core_timing;
+    std::array<Teakra::Timer, 2> timer{};
+    std::array<Tearka::Btdmp, 2> btdmp{};
+    Teakra::CoreTiming core_timing{timer, btdmp};
     Teakra::Timer timer{core_timing};
     int interrupt_counter = 0;
     TimerTestEnvironment() {

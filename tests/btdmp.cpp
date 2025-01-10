@@ -1,9 +1,12 @@
+#include <array>
 #include <catch.hpp>
 #include <queue>
 #include "../src/btdmp.h"
 
 struct BtdmpTestEnvironment {
-    Teakra::CoreTiming core_timing;
+    std::array<Teakra::Timer, 2> timer{};
+    std::array<Teakra::Btdmp, 2> btdmp{};
+    Teakra::CoreTiming core_timing{timer, btdmp};
     Teakra::Btdmp btdmp{core_timing};
     int interrupt_counter = 0;
     std::queue<std::array<std::int16_t, 2>> sample_queue;

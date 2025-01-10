@@ -1,3 +1,4 @@
+#include <array>
 #include <memory>
 #include <catch.hpp>
 #include "../src/core_timing.h"
@@ -6,7 +7,9 @@
 #include "../src/shared_memory.h"
 
 TEST_CASE("Cycle accuracy", "[interpreter]") {
-    Teakra::CoreTiming core_timing;
+    std::array<Teakra::Timer, 2> timer{};
+    std::array<Teakra::Btdmp, 2> btdmp{};
+    Teakra::CoreTiming core_timing{timer, btdmp};
     Teakra::SharedMemory shared_memory;
     Teakra::MemoryInterfaceUnit miu;
     Teakra::MemoryInterface memory_interface{shared_memory, miu};
