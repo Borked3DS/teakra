@@ -52,17 +52,6 @@ static constexpr bool IsWindows() {
 }
 #endif
 
-namespace Teakra::Disassembler {
-
-struct ArArpSettings {
-    std::array<std::uint16_t, 2> ar;
-    std::array<std::uint16_t, 4> arp;
-};
-
-std::string Do(std::uint16_t opcode, std::uint16_t expansion = 0,
-               std::optional<ArArpSettings> ar_arp = std::nullopt);
-} // namespace Teakra::Disassembler
-
 namespace Teakra {
 
 constexpr size_t MAX_CODE_SIZE = 256 * 1024 * 1024;

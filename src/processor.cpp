@@ -1,3 +1,4 @@
+#include <teakra/disassembler.h>
 #include "jit_no_ir.h"
 #include "processor.h"
 #include "register.h"
