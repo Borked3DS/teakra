@@ -8,6 +8,16 @@ if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   set(MASTER_PROJECT ON)
 endif()
 
+# Enable link time optimization if supported by compiler
+include(CheckIPOSupported)
+check_ipo_supported(RESULT result)
+if(result)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
+# Set position independent code
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 option(TEAKRA_WARNINGS_AS_ERRORS "Warnings as errors" ${MASTER_PROJECT})
 option(TEAKRA_BUILD_TOOLS "Build tools" ${MASTER_PROJECT})
 option(TEAKRA_BUILD_UNIT_TESTS "Build unit tests" ${MASTER_PROJECT})
