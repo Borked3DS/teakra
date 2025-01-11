@@ -1,7 +1,7 @@
 #include <array>
+#include <catch2/catch_all.hpp>
 #include <string>
 #include <vector>
-#include <catch.hpp>
 #include "../src/ahbm.h"
 #include "../src/dma.h"
 #include "../src/shared_memory.h"

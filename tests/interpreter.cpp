@@ -1,5 +1,5 @@
+#include <catch2/catch_all.hpp>
 #include <memory>
-#include <catch.hpp>
 #include "../src/core_timing.h"
 #include "../src/interpreter.h"
 #include "../src/memory_interface.h"
