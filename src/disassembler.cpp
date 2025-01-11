@@ -2,11 +2,11 @@
 #include <sstream>
 #include <type_traits>
 #include <vector>
+#include <teakra/disassembler.h>
 #include "common_types.h"
 #include "crash.h"
 #include "decoder.h"
 #include "operand.h"
-#include "teakra/disassembler.h"
 
 namespace Teakra::Disassembler {
 

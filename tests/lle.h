@@ -5,9 +5,9 @@
 #include <functional>
 #include <span>
 #include <vector>
+#include <teakra/teakra.h>
 #include "audio_types.h"
 #include "dsp1.h"
-#include "teakra/teakra.h"
 
 class DspLle final {
 public:
