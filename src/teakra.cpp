@@ -1,5 +1,6 @@
 #include <array>
 #include <atomic>
+#include <teakra/teakra.h>
 #include "ahbm.h"
 #include "apbp.h"
 #include "btdmp.h"
@@ -10,7 +11,6 @@
 #include "mmio.h"
 #include "processor.h"
 #include "shared_memory.h"
-#include "teakra/teakra.h"
 #include "timer.h"
 
 namespace Teakra {
