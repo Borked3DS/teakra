@@ -13,6 +13,7 @@ add_executable(teakra_tests
     common_funcs.h
     dsp.h
     swap.h
+    ../include/teakra/teakra.h
     audio.cpp
 )
 

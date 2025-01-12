@@ -29,6 +29,7 @@ public:
     void Reset();
 
     std::array<std::uint8_t, 0x80000>& GetDspMemory();
+    std::array<std::uint8_t, 0x80000>& GetInterpDspMemory();
     const std::array<std::uint8_t, 0x80000>& GetDspMemory() const;
 
     // APBP Data

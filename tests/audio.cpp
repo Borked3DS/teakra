@@ -4,6 +4,7 @@
 #include <cstring>
 #include <vector>
 #include <optional>
+#include <teakra/teakra.h>
 
 #include "audio.h"
 #include "dsp.h"
