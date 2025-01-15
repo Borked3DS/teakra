@@ -62,7 +62,9 @@ create_target_directory_groups(teakra)
 
 target_link_libraries(teakra PRIVATE Threads::Threads tsl::robin_map xbyak::xbyak)
 target_include_directories(teakra
-                           PUBLIC ../include
+                           PUBLIC
+                            "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+                            "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
                            PRIVATE .)
 target_compile_options(teakra PRIVATE ${TEAKRA_CXX_FLAGS})
 
@@ -73,6 +75,8 @@ add_library(teakra_c
     teakra_c.cpp
 )
 target_link_libraries(teakra_c PRIVATE teakra)
+
+set_target_properties(teakra teakra_c PROPERTIES VERSION 0)
 
 if (TEAKRA_BUILD_TOOLS)
     add_subdirectory(coff_reader)

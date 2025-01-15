@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 project(teakra CXX)
 
 if(COMMAND CMAKE_POLICY)
@@ -23,6 +23,9 @@ set(MASTER_PROJECT OFF)
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   set(MASTER_PROJECT ON)
 endif()
+
+# Useful built-in modules
+include(GNUInstallDirs)
 
 option(TEAKRA_WARNINGS_AS_ERRORS "Warnings as errors" ${MASTER_PROJECT})
 option(TEAKRA_BUILD_TOOLS "Build tools" ${MASTER_PROJECT})
@@ -103,3 +106,16 @@ add_subdirectory(src)
 if (TEAKRA_BUILD_UNIT_TESTS)
   add_subdirectory(tests)
 endif()
+
+# Installation
+install(TARGETS teakra teakra_c EXPORT teakraTargets)
+install(EXPORT teakraTargets
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/teakra"
+    NAMESPACE "${PROJECT_NAME}"
+    FILE "teakraConfig.cmake"
+)
+
+install(DIRECTORY
+    "include/teakra"
+    TYPE INCLUDE
+)
