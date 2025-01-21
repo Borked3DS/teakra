@@ -108,7 +108,7 @@ if (TEAKRA_BUILD_UNIT_TESTS)
 endif()
 
 # Installation
-install(TARGETS teakra teakra_c EXPORT teakraTargets)
+install(TARGETS teakra teakra_c robin_map EXPORT teakraTargets)
 install(EXPORT teakraTargets
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/teakra"
     NAMESPACE "${PROJECT_NAME}::"
