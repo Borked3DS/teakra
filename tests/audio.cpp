@@ -27,8 +27,19 @@ std::vector<u8> loadDspFirmFromFile() {
     long size = ftell(f);
     fseek(f, 0, SEEK_SET);
 
+    if (size <= 0) {
+        printf("Invalid or empty file size\n");
+        fclose(f);
+        return {};
+    }
+
     std::vector<u8> dspfirm_binary(size);
-    fread(dspfirm_binary.data(), dspfirm_binary.size(), 1, f);
+    size_t items_read = fread(dspfirm_binary.data(), size, 1, f);
+    if (items_read != 1) {
+        printf("Failed to read dspfirm fully\n");
+        fclose(f);
+        return {};
+    }
     fclose(f);
 
     return dspfirm_binary;
