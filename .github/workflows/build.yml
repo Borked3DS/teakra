@@ -1,0 +1,91 @@
+name: teakra-build
+
+on:
+  push:
+    branches: [ "*" ]
+    tags: [ "*" ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  linux-clang-noble:
+    runs-on: ubuntu-24.04
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_COMPILERCHECK: content
+      CCACHE_SLOPPINESS: time_macros
+      OS: linux
+      TARGET: ${{ matrix.target }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Set up cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ${{ runner.os }}-${{ matrix.target }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.target }}-
+      - name: Remove System Clang
+        run: sudo apt autoremove clang-16 clang-format-16 clang-tidy-16 clang-17 clang-format-17 clang-tidy-17 clang-18 clang-format-18 clang-tidy-18 -y
+      - name: Install Clang PPA
+        uses: myci-actions/add-deb-repo@11
+        with:
+          repo: deb http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main
+          repo-name: llvm
+          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
+      - name: Install GCC PPA
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+      - name: Update deb repositories 
+        run: sudo apt-get update 
+      - name: Install New Packages
+        run: sudo apt-get -y install ccache gcc-14 clang-20 clang-tools-20 clang-20-doc libxcb-xkb-dev libclang-common-20-dev libclang-20-dev libclang1-20 clang-format-20 python3-clang-20 clangd-20 clang-tidy-20 && sudo apt-get clean
+      - name: Get latest CMake and Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+      - name: Install mold linker
+        uses: rui314/setup-mold@v1
+        with:
+          make-default: false
+      - name: Build
+        run: ./.ci/linux-clang.sh
+  linux-gcc-noble:
+    runs-on: ubuntu-24.04
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_COMPILERCHECK: content
+      CCACHE_SLOPPINESS: time_macros
+      OS: linux
+      TARGET: ${{ matrix.target }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Set up cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ${{ runner.os }}-${{ matrix.target }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.target }}-
+      - name: Install GCC PPA
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+      - name: Update deb repositories 
+        run: sudo apt-get update 
+      - name: Install New Packages
+        run: sudo apt-get -y install ccache gcc-14 build-essential && sudo apt-get clean
+      - name: Get latest CMake and Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+      - name: Install mold linker
+        uses: rui314/setup-mold@v1
+        with:
+          make-default: false
+      - name: Build
+        run: ./.ci/linux-gcc.sh
