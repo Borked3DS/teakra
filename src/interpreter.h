@@ -85,10 +85,12 @@ public:
 private:
     void print_registers() {
         fprintf(dbg_out, "Registers:\n");
-        fprintf(dbg_out, "a0:  0x%010llx    b0:  0x%010llx\n", regs.a[0] & 0xFFFFFFFFFF,
-                regs.b[0] & 0xFFFFFFFFFF);
-        fprintf(dbg_out, "a1:  0x%010llx    b1:  0x%010llx\n", regs.a[1] & 0xFFFFFFFFFF,
-                regs.b[1] & 0xFFFFFFFFFF);
+        fprintf(dbg_out, "a0:  0x%010llx    b0:  0x%010llx\n",
+                (unsigned long long)(regs.a[0] & 0xFFFFFFFFFF),
+                (unsigned long long)(regs.b[0] & 0xFFFFFFFFFF));
+        fprintf(dbg_out, "a1:  0x%010llx    b1:  0x%010llx\n",
+                (unsigned long long)(regs.a[1] & 0xFFFFFFFFFF),
+                (unsigned long long)(regs.b[1] & 0xFFFFFFFFFF));
         // fprintf(dbg_out, "a1s: 0x%010lx    b1s: 0x%010lx\n", regs.a1s, regs.b1s);
         fprintf(dbg_out, "x0:  0x%04x          y0:  0x%04x\n", regs.x[0], regs.y[0]);
         fprintf(dbg_out, "x1:  0x%04x          y1:  0x%04x\n", regs.x[1], regs.y[1]);
@@ -155,18 +157,22 @@ private:
                 "0x%02x\n",
                 regs.modi, regs.stepi, regs.stepi0, regs.modj, regs.stepj, regs.stepj0);
         // fprintf(dbg_out, " modib: 0x%03x stepib: 0x%02x                 modjb: 0x%03x stepjb:
-        // 0x%02x\n", regs.modib, regs.stepib, regs.modjb, regs.stepjb); fprintf(dbg_out, " stepi0:
-        // 0x%02x stepi0b: 0x%02x                 stepj0: 0x%02x stepj0b: 0x%02x\n", regs.stepi0,
-        // regs.stepi0b, regs.stepj0, regs.stepj0b);
+        // 0x%02x\n", regs.modib, regs.stepib, regs.modjb, regs.stepjb);
+        // fprintf(dbg_out, " stepi0: 0x%02x stepi0b: 0x%02x                 stepj0: 0x%02x stepj0b:
+        // 0x%02x\n", regs.stepi0, regs.stepi0b, regs.stepj0, regs.stepj0b);
 
         fprintf(dbg_out, "stt0: 0x%04x\n", regs.Get<stt0>());
-        fprintf(dbg_out, " . . . . fc1 . . . fz fm fn fv fc0 fe fvl flm\n");
-        fprintf(dbg_out, " x x x x   %u x x x  %u  %u  %u  %u   %u  %u   %u   %u\n", regs.fc1,
-                regs.fz, regs.fm, regs.fn, regs.fv, regs.fc0, regs.fe, regs.fvl, regs.flm);
+        fprintf(dbg_out, " a0e fz fm fn fv fc0 fe flm|fvl fr im1 im0 ie sat\n");
+        fprintf(dbg_out, " 0x%llx  %u  %u  %u  %u   %u  %u       %u  %u   %u   %u  %u   %u\n",
+                (unsigned long long)((regs.a[0] >> 32) & 0xF), regs.fz, regs.fm, regs.fn, regs.fv,
+                regs.fc0, regs.fe, regs.flm | regs.fvl, regs.fr, regs.im[1], regs.im[0], regs.ie,
+                regs.sat);
+
         fprintf(dbg_out, "stt1: 0x%04x\n", regs.Get<stt1>());
-        fprintf(dbg_out, " pe1 pe0 . . iu1 iu0 . . . . . fr . . . .\n");
-        fprintf(dbg_out, "   %u   %u x x   %u   %u x x x x x  %u x x x x\n", regs.pe[1], regs.pe[0],
-                regs.iu[1], regs.iu[0], regs.fr);
+        fprintf(dbg_out, " a1e ps0 . . page\n");
+        fprintf(dbg_out, " 0x%llx   %u x x 0x%02x\n", (unsigned long long)((regs.a[1] >> 32) & 0xF),
+                regs.ps[0], regs.page);
+
         fprintf(dbg_out, "stt2: 0x%04x\n", regs.Get<stt2>());
         fprintf(dbg_out, " lp bcn . . . . pcmhi . . ipv ip2 ip1 ip0\n");
         fprintf(dbg_out, "  %u --%u x x x x    -%u x x   %u   %u   %u   %u\n", regs.lp, regs.bcn,
@@ -177,10 +183,12 @@ private:
         fprintf(dbg_out, " x x  -%u x  -%u   %u   %u %u  -%u --%u    %u   %u\n", regs.ps[1],
                 regs.ps[0], regs.ou[1], regs.ou[0], regs.s, regs.hwm, regs.mod0_unk_const,
                 regs.sata, regs.sat);
+
         fprintf(dbg_out, "mod1: 0x%04x\n", regs.Get<mod1>());
         fprintf(dbg_out, " epj epi cmd stp16 . . . . page\n");
         fprintf(dbg_out, "   %u   %u   %u     %u x x x x 0x%02x\n", regs.epj, regs.epi, regs.cmd,
                 regs.stp16, regs.page);
+
         fprintf(dbg_out, "mod2: 0x%04x\n", regs.Get<mod2>());
         fprintf(dbg_out, " br7 br6 br5 br4 br3 br2 br1 br0 m7 m6 m5 m4 m3 m2 m1 m0\n");
         fprintf(dbg_out,
@@ -188,6 +196,7 @@ private:
                 regs.br[7], regs.br[6], regs.br[5], regs.br[4], regs.br[3], regs.br[2], regs.br[1],
                 regs.br[0], regs.m[7], regs.m[6], regs.m[5], regs.m[4], regs.m[3], regs.m[2],
                 regs.m[1], regs.m[0]);
+
         fprintf(dbg_out, "mod3: 0x%04x\n", regs.Get<mod3>());
         fprintf(dbg_out, " crep cpc ccnta . imv im2 im1 im0 ie ou4 ou3 ou2 ic2 ic1 ic0 nimc\n");
         fprintf(
@@ -199,12 +208,15 @@ private:
         fprintf(dbg_out, "st0: 0x%04x\n", regs.Get<st0>());
         fprintf(dbg_out, " a0e fz fm fn fv fc0 fe flm|fvl fr im1 im0 ie sat\n");
         fprintf(dbg_out, " 0x%llx  %u  %u  %u  %u   %u  %u       %u  %u   %u   %u  %u   %u\n",
-                (regs.a[0] >> 32) & 0xF, regs.fz, regs.fm, regs.fn, regs.fv, regs.fc0, regs.fe,
-                regs.flm | regs.fvl, regs.fr, regs.im[1], regs.im[0], regs.ie, regs.sat);
+                (unsigned long long)((regs.a[0] >> 32) & 0xF), regs.fz, regs.fm, regs.fn, regs.fv,
+                regs.fc0, regs.fe, regs.flm | regs.fvl, regs.fr, regs.im[1], regs.im[0], regs.ie,
+                regs.sat);
+
         fprintf(dbg_out, "st1: 0x%04x\n", regs.Get<st1>());
         fprintf(dbg_out, " a1e ps0 . . page\n");
-        fprintf(dbg_out, " 0x%llx   %u x x 0x%02x\n", (regs.a[1] >> 32) & 0xF, regs.ps[0],
-                regs.page);
+        fprintf(dbg_out, " 0x%llx   %u x x 0x%02x\n", (unsigned long long)((regs.a[1] >> 32) & 0xF),
+                regs.ps[0], regs.page);
+
         fprintf(dbg_out, "st2: 0x%04x\n", regs.Get<st2>());
         fprintf(dbg_out, " ip1 ip0 ip2 . iu1 iu0 ou1 ou0 s im2 m5 m4 m3 m2 m1 m0\n");
         fprintf(dbg_out, "   %u   %u   %u x   %u   %u   %u   %u %u   %u  %u  %u  %u  %u  %u  %u\n",
@@ -222,6 +234,7 @@ private:
                 " arrn0: %u arrn1: %u aroffset0: %u arstep0: %u aroffset1: %u arstep1: %u\n",
                 regs.arrn[0], regs.arrn[1], regs.aroffset[0], regs.arstep[0], regs.aroffset[1],
                 regs.arstep[1]);
+
         fprintf(dbg_out, "ar1: 0x%04x\n", regs.Get<ar1>());
         fprintf(dbg_out,
                 " arrn2: %u arrn3: %u aroffset2: %u arstep2: %u aroffset3: %u arstep3: %u\n",
@@ -234,18 +247,21 @@ private:
                 "%u\n",
                 regs.arprnj[0], regs.arprni[0], regs.arpoffsetj[0], regs.arpstepj[0],
                 regs.arpoffseti[0], regs.arpstepi[0]);
+
         fprintf(dbg_out, "arp1: 0x%04x\n", regs.Get<arp1>());
         fprintf(dbg_out,
                 " arprnj1: %u arprni1: %u arpoffsetj1: %u arpstepj1: %u arpoffseti1: %u arpstepi1: "
                 "%u\n",
                 regs.arprnj[1], regs.arprni[1], regs.arpoffsetj[1], regs.arpstepj[1],
                 regs.arpoffseti[1], regs.arpstepi[1]);
+
         fprintf(dbg_out, "arp2: 0x%04x\n", regs.Get<arp2>());
         fprintf(dbg_out,
                 " arprnj2: %u arprni2: %u arpoffsetj2: %u arpstepj2: %u arpoffseti2: %u arpstepi2: "
                 "%u\n",
                 regs.arprnj[2], regs.arprni[2], regs.arpoffsetj[2], regs.arpstepj[2],
                 regs.arpoffseti[2], regs.arpstepi[2]);
+
         fprintf(dbg_out, "arp3: 0x%04x\n", regs.Get<arp3>());
         fprintf(dbg_out,
                 " arprnj3: %u arprni3: %u arpoffsetj3: %u arpstepj3: %u arpoffseti3: %u arpstepi3: "
@@ -271,7 +287,7 @@ public:
     void Run(u64 cycles) {
         idle = false;
         trace_file << std::setfill('0') << std::setw(8) << std::right << std::uppercase << std::hex
-             << regs.pc << std::endl;
+                   << regs.pc << std::endl;
         for (u64 i = 0; i < cycles; ++i) {
             bool in_breakpoints = false;
             if (std::find(breakpoints.begin(), breakpoints.end(), regs.pc) != breakpoints.end()) {
@@ -399,7 +415,7 @@ public:
                     --regs.repc;
                     --regs.pc;
                     trace_file << ":rep_backwards" << std::setfill('0') << std::setw(8) << regs.pc
-                         << std::endl;
+                               << std::endl;
                 }
             }
 
@@ -411,7 +427,7 @@ public:
                     --regs.bkrep_stack[regs.bcn - 1].lc;
                     regs.pc = regs.bkrep_stack[regs.bcn - 1].start;
                     trace_file << ":bkrep_stack" << std::setfill('0') << std::setw(8) << regs.pc
-                         << std::endl;
+                               << std::endl;
                 }
             }
 
@@ -427,8 +443,8 @@ public:
                         regs.ie = 0;
                         PushPC();
                         regs.pc = 0x0006 + i * 8;
-                        trace_file << ":interrupt" << std::setfill('0') << std::setw(8) << 0x0006 + i * 8
-                             << std::endl;
+                        trace_file << ":interrupt" << std::setfill('0') << std::setw(8)
+                                   << 0x0006 + i * 8 << std::endl;
                         idle = false;
                         interrupt_handled = true;
                         if (regs.ic[i]) {
@@ -442,8 +458,8 @@ public:
                     regs.ie = 0;
                     PushPC();
                     regs.pc = vinterrupt_address;
-                    trace_file << ":vinterrupt" << std::setfill('0') << std::setw(8) << vinterrupt_address
-                         << std::endl;
+                    trace_file << ":vinterrupt" << std::setfill('0') << std::setw(8)
+                               << vinterrupt_address << std::endl;
                     idle = false;
                     if (vinterrupt_context_switch) {
                         ContextStore();
@@ -1410,8 +1426,8 @@ public:
     void br(Address18_16 addr_low, Address18_2 addr_high, Cond cond) {
         if (regs.ConditionPass(cond)) {
             SetPC(Address32(addr_low, addr_high));
-            trace_file << ":br" << std::setfill('0') << std::setw(8) << Address32(addr_low, addr_high)
-                 << std::endl;
+            trace_file << ":br" << std::setfill('0') << std::setw(8)
+                       << Address32(addr_low, addr_high) << std::endl;
         }
     }
 
@@ -1436,21 +1452,21 @@ public:
         if (regs.ConditionPass(cond)) {
             PushPC();
             SetPC(Address32(addr_low, addr_high));
-            trace_file << ":call" << std::setfill('0') << std::setw(8) << Address32(addr_low, addr_high)
-                 << std::endl;
+            trace_file << ":call" << std::setfill('0') << std::setw(8)
+                       << Address32(addr_low, addr_high) << std::endl;
         }
     }
     void calla(Axl a) {
         PushPC();
         SetPC(RegToBus16(a.GetName())); // use pcmhi?
         trace_file << ":callaAxl" << std::setfill('0') << std::setw(8) << RegToBus16(a.GetName())
-             << std::endl;
+                   << std::endl;
     }
     void calla(Ax a) {
         PushPC();
         SetPC(GetAcc(a.GetName()) & 0x3FFFF); // no saturation ?
-        trace_file << ":callaAx" << std::setfill('0') << std::setw(8) << (GetAcc(a.GetName()) & 0x3FFFF)
-             << std::endl;
+        trace_file << ":callaAx" << std::setfill('0') << std::setw(8)
+                   << (GetAcc(a.GetName()) & 0x3FFFF) << std::endl;
     }
     void callr(RelAddr7 addr, Cond cond) {
         if (regs.ConditionPass(cond)) {
@@ -1976,7 +1992,8 @@ public:
         u16 h = mem.ProgramRead(address);
         u16 l = mem.ProgramRead(address + 1);
         SetPC(l | ((u32)h << 16));
-        trace_file << ":movpdw" << std::setfill('0') << std::setw(8) << (l | ((u32)h << 16)) << std::endl;
+        trace_file << ":movpdw" << std::setfill('0') << std::setw(8) << (l | ((u32)h << 16))
+                   << std::endl;
     }
 
     void mov(Ab a, Ab b) {
@@ -2332,13 +2349,13 @@ public:
         u64 value = GetAcc(a.GetName());
         SetPC(value & 0xFFFFFFFF);
         trace_file << ":mov_pcAx" << std::setfill('0') << std::setw(8) << (value & 0xFFFFFFFF)
-             << std::endl;
+                   << std::endl;
     }
     void mov_pc(Bx a) {
         u64 value = GetAcc(a.GetName());
         SetPC(value & 0xFFFFFFFF);
         trace_file << ":mov_pcBx" << std::setfill('0') << std::setw(8) << (value & 0xFFFFFFFF)
-             << std::endl;
+                   << std::endl;
     }
 
     void mov_mixp_to(Bx b) {
